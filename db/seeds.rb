@@ -14,3 +14,24 @@ token = RestClient.post("https://api.tcgplayer.com/token", payload  ,headers={"c
 
 token = JSON.parse(token)
 @access_token = token['access_token']
+
+def all_cards
+    length = 0
+    response = RestClient.get 'https://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=cards', {:Authorization => 'Bearer '+ @access_token}
+    length = JSON.parse(response)['totalItems']
+    offset = 0
+    json = []
+    while offset < length do
+        response = RestClient.get('https://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=cards&offset='+offset.to_s+'&limit=100', {:Authorization => 'Bearer '+ @access_token}){ |response, request, result, &block|
+                        case response.code
+                        when 200
+                            json.push(JSON.parse(response)['results'])
+                        when 404
+                            puts offset, count
+                        else
+                          response.return!(request, result, &block)
+                        end }
+        offset += 100
+    end
+    return json.flatten
+end
