@@ -71,3 +71,13 @@ def check_text(values)
     end
     return text
 end
+
+def check_sub_type(values)
+    sub_type = ''
+    values.each do |value|
+        if value['name'] == "SubType"
+            sub_type = value['value']
+        end
+    end
+    return sub_type
+end
