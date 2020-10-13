@@ -35,3 +35,29 @@ def all_cards
     end
     return json.flatten
 end
+
+def check_rarity(values)
+    rarity = ""
+    values.each do |value|
+        if value['name'] === "Rarity"
+            if value['value'] == 'U'
+                rarity = 'Uncommon'
+            elsif value['value'] == 'T'
+                rarity = 'Token'
+            elsif value['value'] == 'S'
+                rarity = 'Special'
+            elsif value['value'] == 'P'
+                rarity = 'Promo'
+            elsif value['value'] == 'M'
+                rarity = 'Mythic'
+            elsif value['value'] == 'L'
+                rarity = 'Land'
+            elsif value['value'] == 'C'
+                rarity = 'Common'
+            elsif value['value'] == 'R'
+                rarity = 'Rare'
+            end
+        end
+    end
+    return rarity
+end
