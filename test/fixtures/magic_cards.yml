@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  img_url: MyString
+  category_id: 1
+  product_id: 1
+  group_id: 1
+  rarity: MyString
+  sub_type: MyString
+  text: MyString
+  group_name: MyString
+  normal_low_price: 9.99
+  normal_mid_price: 9.99
+  normal_high_price: 9.99
+  normal_market_price: 9.99
+  foil_low_price: 9.99
+  foil_mid_price: 9.99
+  foil_high_price: 9.99
+  foil_market_price: 9.99
+
+two:
+  name: MyString
+  img_url: MyString
+  category_id: 1
+  product_id: 1
+  group_id: 1
+  rarity: MyString
+  sub_type: MyString
+  text: MyString
+  group_name: MyString
+  normal_low_price: 9.99
+  normal_mid_price: 9.99
+  normal_high_price: 9.99
+  normal_market_price: 9.99
+  foil_low_price: 9.99
+  foil_mid_price: 9.99
+  foil_high_price: 9.99
+  foil_market_price: 9.99
