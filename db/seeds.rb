@@ -93,52 +93,52 @@ token = JSON.parse(token)
 #         end
 # end
 
-MagicCard.default_order.all.slice(40000, MagicCard.default_order.all.length).each do |c|
-    group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
-    group_json = JSON.parse(group_response)['results'][0]
-    puts 'card id => ', c['id']
-    puts 'group id => ', c['group_id']
-    c.update(
-        group_name: group_json['name']
-    )
-    puts 'group name within json => ', group_json['name']
-    puts 'group name after the card updated =>', c['group_name']
-end
-
-# MagicCard.default_order.all.slice(50000, MagicCard.default_order.all.length).each do |c|
-# # MagicCard.default_order.all.each do |c|
-# # MagicCard.default_order.all.slice(50000, 10000).each do |c|
-#     # puts 'card name => ' + c['name'] + ' product_id => ' + c['product_id'].to_s + ' id => ' + c['id'].to_s
-#     price_response = RestClient.get'https://api.tcgplayer.com/pricing/product/' + c['product_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
-
-#     price_json = JSON.parse(price_response)['results']
-#     puts 'price_json => ', price_json
-#     puts 'card in database => ', c['product_id']
-#     puts 'card id database => ', c['id']
-#     price_json.map do |price_data|
-#     puts 'subTypeName => ', price_data['subTypeName']
-#         if price_data['subTypeName'] == 'Normal'
-#             puts 'it should be normal price = >', price_data['lowPrice']
-#             c.update(
-#                 normal_low_price: price_data['lowPrice'],
-#                 normal_mid_price: price_data['midPrice'],
-#                 normal_high_price: price_data['highPrice'],
-#                 normal_market_price: price_data['marketPrice']
-#             )
-#         elsif price_data['subTypeName'] == 'Foil'
-#             puts 'it should be foil price = >', price_data['lowPrice']
-#             c.update(
-#                 foil_low_price: price_data['lowPrice'],
-#                 foil_mid_price:price_data['midPrice'],
-#                 foil_high_price: price_data['highPrice'],
-#                 foil_market_price:price_data['marketPrice']
-#             )
-#         end
-#     end
-#     puts 'card updated' + ' card normal_low_price => ' + c['normal_low_price'].to_s
-#     puts 'card updated' + ' card foil_low_price => ' + c['foil_low_price'].to_s
-#     # puts 'foil => ', c['foil']
+# MagicCard.default_order.all.slice(40000, MagicCard.default_order.all.length).each do |c|
+#     group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
+#     group_json = JSON.parse(group_response)['results'][0]
+#     puts 'card id => ', c['id']
+#     puts 'group id => ', c['group_id']
+#     c.update(
+#         group_name: group_json['name']
+#     )
+#     puts 'group name within json => ', group_json['name']
+#     puts 'group name after the card updated =>', c['group_name']
 # end
+
+MagicCard.default_order.all.slice(0, 25000).each do |c|
+# MagicCard.default_order.all.each do |c|
+# MagicCard.default_order.all.slice(50000, 10000).each do |c|
+    # puts 'card name => ' + c['name'] + ' product_id => ' + c['product_id'].to_s + ' id => ' + c['id'].to_s
+    price_response = RestClient.get'https://api.tcgplayer.com/pricing/product/' + c['product_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
+
+    price_json = JSON.parse(price_response)['results']
+    puts 'price_json => ', price_json
+    puts 'card in database => ', c['product_id']
+    puts 'card id database => ', c['id']
+    price_json.map do |price_data|
+    puts 'subTypeName => ', price_data['subTypeName']
+        if price_data['subTypeName'] == 'Normal'
+            puts 'it should be normal price = >', price_data['lowPrice']
+            c.update(
+                normal_low_price: price_data['lowPrice'],
+                normal_mid_price: price_data['midPrice'],
+                normal_high_price: price_data['highPrice'],
+                normal_market_price: price_data['marketPrice']
+            )
+        elsif price_data['subTypeName'] == 'Foil'
+            puts 'it should be foil price = >', price_data['lowPrice']
+            c.update(
+                foil_low_price: price_data['lowPrice'],
+                foil_mid_price:price_data['midPrice'],
+                foil_high_price: price_data['highPrice'],
+                foil_market_price:price_data['marketPrice']
+            )
+        end
+    end
+    puts 'card updated' + ' card normal_low_price => ' + c['normal_low_price'].to_s
+    puts 'card updated' + ' card foil_low_price => ' + c['foil_low_price'].to_s
+    # puts 'foil => ', c['foil']
+end
 
 # MagicCard.default_order.all.slice(50000, MagicCard.default_order.all.length).each do |c|
 #     puts ' id => ' + c['id'].to_s
