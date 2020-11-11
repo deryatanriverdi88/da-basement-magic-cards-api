@@ -93,7 +93,7 @@ token = JSON.parse(token)
 #         end
 # end
 
-MagicCard.default_order.all.slice(20000, 10000).each do |c|
+MagicCard.default_order.all.slice(30000, 10000).each do |c|
     group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
     group_json = JSON.parse(group_response)['results'][0]
     puts 'card id => ', c['id']
