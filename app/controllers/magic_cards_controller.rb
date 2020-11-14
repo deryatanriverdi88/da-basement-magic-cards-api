@@ -10,7 +10,7 @@ class MagicCardsController < ApplicationController
     end
 
     def last_ten
-        render json:cards = MagicCard.all.alphabetical.first(1000)
+        render json:cards = MagicCard.all.alphabetical.last(1)
     end
 
     def token
