@@ -28,7 +28,7 @@ class MagicCardsController < ApplicationController
         magic_card = MagicCard.where(
             MagicCard.arel_table[:name]
                .lower
-               .where(params[:name].downcase)
+               .matches("%" + params[:name].downcase + "%")
         )
 
         render json: magic_card
