@@ -106,7 +106,7 @@ token = JSON.parse(token)
 #     puts 'group name after the card updated =>', c['group_name']
 # end
 
-MagicCard.default_order.all.each do |c|
+MagicCard.default_order.all.slice(35960, MagicCard.default_order.all.length).each do |c|
 # MagicCard.default_order.all.each do |c|
 # MagicCard.default_order.all.slice(50000, 10000).each do |c|
     # puts 'card name => ' + c['name'] + ' product_id => ' + c['product_id'].to_s + ' id => ' + c['id'].to_s
