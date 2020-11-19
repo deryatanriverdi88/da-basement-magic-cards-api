@@ -107,23 +107,6 @@ MagicCard.default_order.all.each do |c|
 end
 
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 90636b1987fabfd8775cfc7260f1075cdcb6ec85
-# MagicCard.default_order.all.slice(40000, MagicCard.default_order.all.length).each do |c|
-#     group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
-#     group_json = JSON.parse(group_response)['results'][0]
-#     puts 'card id => ', c['id']
-#     puts 'group id => ', c['group_id']
-#     c.update(
-#         group_name: group_json['name']
-#     )
-#     puts 'group name within json => ', group_json['name']
-#     puts 'group name after the card updated =>', c['group_name']
-# end
-
 # MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
 # # MagicCard.default_order.all.each do |c|
 # # MagicCard.default_order.all.slice(50000, 10000).each do |c|
