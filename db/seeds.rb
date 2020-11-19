@@ -97,7 +97,7 @@ MagicCard.default_order.all.each do |c|
     group_json = JSON.parse(group_response)['results'][0]
     puts 'card id => ', c['id']
     puts 'group id => ', c['group_id']
-      if card['group_name']== nil
+      if c['group_name']== nil
     c.update(
         group_name: group_json['name']
     )
