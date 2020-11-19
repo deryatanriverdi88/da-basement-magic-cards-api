@@ -15,83 +15,83 @@ token = RestClient.post("https://api.tcgplayer.com/token", payload  ,headers={"c
 token = JSON.parse(token)
 @access_token = token['access_token']
 
-# def all_cards
-#     length = 0
-#     response = RestClient.get 'https://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=cards', {:Authorization => 'Bearer '+ @access_token}
-#     length = JSON.parse(response)['totalItems']
-#     offset = 0
-#     json = []
-#     while offset < length do
-#         response = RestClient.get('https://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=cards&offset='+offset.to_s+'&limit=100', {:Authorization => 'Bearer '+ @access_token}){ |response, request, result, &block|
-#                         case response.code
-#                         when 200
-#                             json.push(JSON.parse(response)['results'])
-#                         when 404
-#                             puts offset, count
-#                         else
-#                           response.return!(request, result, &block)
-#                         end }
-#         offset += 100
-#     end
-#     puts "jason => ", json.flatten
-#     return json.flatten
-# end
+def all_cards
+    length = 0
+    response = RestClient.get 'https://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=cards', {:Authorization => 'Bearer '+ @access_token}
+    length = JSON.parse(response)['totalItems']
+    offset = 0
+    json = []
+    while offset < length do
+        response = RestClient.get('https://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=cards&offset='+offset.to_s+'&limit=100', {:Authorization => 'Bearer '+ @access_token}){ |response, request, result, &block|
+                        case response.code
+                        when 200
+                            json.push(JSON.parse(response)['results'])
+                        when 404
+                            puts offset, count
+                        else
+                          response.return!(request, result, &block)
+                        end }
+        offset += 100
+    end
+    puts "jason => ", json.flatten
+    return json.flatten
+end
 
-# def check_rarity(values)
-#     rarity = ""
-#     values.each do |value|
-#         if value['name'] === "Rarity"
-#             if value['value'] == 'U'
-#                 rarity = 'Uncommon'
-#             elsif value['value'] == 'T'
-#                 rarity = 'Token'
-#             elsif value['value'] == 'S'
-#                 rarity = 'Special'
-#             elsif value['value'] == 'P'
-#                 rarity = 'Promo'
-#             elsif value['value'] == 'M'
-#                 rarity = 'Mythic'
-#             elsif value['value'] == 'L'
-#                 rarity = 'Land'
-#             elsif value['value'] == 'C'
-#                 rarity = 'Common'
-#             elsif value['value'] == 'R'
-#                 rarity = 'Rare'
-#             end
-#         end
-#     end
-#     return rarity
-# end
+def check_rarity(values)
+    rarity = ""
+    values.each do |value|
+        if value['name'] === "Rarity"
+            if value['value'] == 'U'
+                rarity = 'Uncommon'
+            elsif value['value'] == 'T'
+                rarity = 'Token'
+            elsif value['value'] == 'S'
+                rarity = 'Special'
+            elsif value['value'] == 'P'
+                rarity = 'Promo'
+            elsif value['value'] == 'M'
+                rarity = 'Mythic'
+            elsif value['value'] == 'L'
+                rarity = 'Land'
+            elsif value['value'] == 'C'
+                rarity = 'Common'
+            elsif value['value'] == 'R'
+                rarity = 'Rare'
+            end
+        end
+    end
+    return rarity
+end
 
-# def check_text(values)
-#     text = ''
-#     values.each do |value|
-#         if value['name'] == "OracleText"
-#             text = value['value']
-#         end
-#     end
-#     return text
-# end
+def check_text(values)
+    text = ''
+    values.each do |value|
+        if value['name'] == "OracleText"
+            text = value['value']
+        end
+    end
+    return text
+end
 
-# def check_sub_type(values)
-#     sub_type = ''
-#     values.each do |value|
-#         if value['name'] == "SubType"
-#             sub_type = value['value']
-#         end
-#     end
-#     return sub_type
-# end
+def check_sub_type(values)
+    sub_type = ''
+    values.each do |value|
+        if value['name'] == "SubType"
+            sub_type = value['value']
+        end
+    end
+    return sub_type
+end
 
 
-# all_cards.sort_by{|card| card['id']}.each do |card|
-#         puts 'card => ', card
-#         if card
-#         MagicCard.create(name: card["name"], img_url: card['imageUrl'], category_id: card['categoryId'], group_id: card['groupId'], product_id: card['productId'],rarity: check_rarity(card['extendedData']), sub_type: check_sub_type(card['extendedData']), text: check_text(card['extendedData']))
-#         else
-#             puts "no more card"
-#         end
-# end
+all_cards.sort_by{|card| card['id']}.each do |card|
+        if card && !MagicCard.all.exists?(product_id: card['productId'])
+            puts 'card => ', card
+        MagicCard.create(name: card["name"], img_url: card['imageUrl'], category_id: card['categoryId'], group_id: card['groupId'], product_id: card['productId'],rarity: check_rarity(card['extendedData']), sub_type: check_sub_type(card['extendedData']), text: check_text(card['extendedData']))
+        else
+            puts "card exist in database"
+        end
+end
 
 # MagicCard.default_order.all.slice(40000, MagicCard.default_order.all.length).each do |c|
 #     group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
@@ -140,23 +140,65 @@ token = JSON.parse(token)
 #     # puts 'foil => ', c['foil']
 # end
 
-MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
-    puts ' id => ' + c['id'].to_s
-    puts 'group id => ' + c['group_id'].to_s
+# MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
+#     puts ' id => ' + c['id'].to_s
+#     puts 'group id => ' + c['group_id'].to_s
 
-    icon_response  =  RestClient.get('https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'){|response, request, result, block|
-        case response.code
-        when 200
-            c.update(
-            icon: 'https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'
-        )
-        when 403
-            c.update(
-                icon: ""
-            )
+#     icon_response  =  RestClient.get('https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'){|response, request, result, block|
+#         case response.code
+#         when 200
+#             c.update(
+#             icon: 'https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'
+#         )
+#         when 403
+#             c.update(
+#                 icon: ""
+#             )
+#         end
+#     }
+
+# end
+
+# MagicCard.default_order.all.slice(5000, MagicCard.default_order.all.length).each do |card|
+#     if !card['group_name']
+#         card.destroy
+#         puts card['id']
+#         puts 'group name' + card['group_name'].to_s
+#         puts card['name'] + 'is destroyed'
+#     end
+# end
+
+MagicCard.default_order.all.each do |card|
+    puts 'id => ' + card['id'].to_s
+    puts 'product_id => ' + card['product_id'].to_s
+    color_response =RestClient.get('https://api.scryfall.com/cards/tcgplayer/'+ card['product_id'].to_s)
+    color_json = JSON.parse(color_response)["color_identity"].pop
+    puts color_json
+
+    if color_json === "W" && color_json.length == 1
+        puts "White"
+        card.update(color: "White")
+    elsif color_json == "U" && color_json.length == 1
+        puts "Blue"
+        card.update(color: "Blue")
+    elsif color_json == "B" && color_json.length == 1
+        puts "Black"
+        card.update(color: "Black")
+    elsif color_json == "R" && color_json.length == 1
+        puts "Red"
+        card.update(color: "Red")
+    elsif color_json == "G" && color_json.length == 1
+        puts "Green"
+        card.update(color: "Green")
+    elsif color_json
+        if color_json.length > 2
+            puts "Multicolor"
+            card.update(color: "Multicolor")
         end
-    }
-
+    elsif color_json == nil
+        puts "Colorless"
+        card.update(color: "Colorless")
+    end
 end
 
 puts "Seeded 🍇"
