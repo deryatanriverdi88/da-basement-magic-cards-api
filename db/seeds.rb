@@ -141,7 +141,7 @@ token = JSON.parse(token)
 #     # puts 'foil => ', c['foil']
 # end
 
-MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.lenght).each do |c|
+MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
     puts ' id => ' + c['id'].to_s
     puts 'group id => ' + c['group_id'].to_s
 
