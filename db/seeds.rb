@@ -141,49 +141,49 @@ token = JSON.parse(token)
 #     # puts 'foil => ', c['foil']
 # end
 
-MagicCard.default_order.all.slice(41780, MagicCard.default_order.all.length).each do |c|
-    puts ' id => ' + c['id'].to_s
-    puts "product_id => " + c['product_id'].to_s
-    puts 'group id => ' + c['group_id'].to_s
+# MagicCard.default_order.all.slice(41780, MagicCard.default_order.all.length).each do |c|
+#     puts ' id => ' + c['id'].to_s
+#     puts "product_id => " + c['product_id'].to_s
+#     puts 'group id => ' + c['group_id'].to_s
 
-    response_body = begin
-        RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s)
-      rescue => e
-        e.response.body
-      end
-      json_response = JSON.parse(response_body)
-      puts json_response
-      if json_response['code'] != "not_found"
-            puts "icon url => " + json_response['icon_svg_uri']
-            c.update(
-            icon: json_response['icon_svg_uri']
-            )
-      else
-        puts "error"
-        c.update(
-            icon: ""
-        )
-      end
-    # icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s){|response, request, result, block|
-    #     puts  response
-    #     puts "json => " + JSON.parse(response)['icon_svg_uri']
-    #     case response
+#     response_body = begin
+#         RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s)
+#       rescue => e
+#         e.response.body
+#       end
+#       json_response = JSON.parse(response_body)
+#       puts json_response
+#       if json_response['code'] != "not_found"
+#             puts "icon url => " + json_response['icon_svg_uri']
+#             c.update(
+#             icon: json_response['icon_svg_uri']
+#             )
+#       else
+#         puts "error"
+#         c.update(
+#             icon: ""
+#         )
+#       end
+#     # icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s){|response, request, result, block|
+#     #     puts  response
+#     #     puts "json => " + JSON.parse(response)['icon_svg_uri']
+#     #     case response
 
-    #     when JSON.parse(response)['icon_svg_uri'] != ""
-    #         icon_json = JSON.parse(icon_response)
-    #         puts "icon url => " + icon_json['icon_svg_uri']
-    #         c.update(
-    #         icon: icon_json
-    #     )
-    #     when JSON.parse(response)['icon_svg_uri'] != ""
-    #         puts "error"
-    #         c.update(
-    #             icon: ""
-    #         )
-    #     end
-    # }
+#     #     when JSON.parse(response)['icon_svg_uri'] != ""
+#     #         icon_json = JSON.parse(icon_response)
+#     #         puts "icon url => " + icon_json['icon_svg_uri']
+#     #         c.update(
+#     #         icon: icon_json
+#     #     )
+#     #     when JSON.parse(response)['icon_svg_uri'] != ""
+#     #         puts "error"
+#     #         c.update(
+#     #             icon: ""
+#     #         )
+#     #     end
+#     # }
 
-end
+# end
 
 # MagicCard.default_order.all.slice(5000, MagicCard.default_order.all.length).each do |card|
 #     if !card['group_name']
@@ -194,37 +194,37 @@ end
 #     end
 # end
 
-# MagicCard.default_order.all.each do |card|
-#     puts 'id => ' + card['id'].to_s
-#     puts 'product_id => ' + card['product_id'].to_s
-#     color_response =RestClient.get('https://api.scryfall.com/cards/tcgplayer/'+ card['product_id'].to_s)
-#     color_json = JSON.parse(color_response)["color_identity"].pop
-#     puts color_json
+MagicCard.default_order.all.slice(0, 25000).each do |card|
+    puts 'id => ' + card['id'].to_s
+    puts 'product_id => ' + card['product_id'].to_s
+    color_response =RestClient.get('https://api.scryfall.com/cards/tcgplayer/'+ card['product_id'].to_s)
+    color_json = JSON.parse(color_response)["color_identity"].pop
+    puts color_json
 
-#     if color_json === "W" && color_json.length == 1
-#         puts "White"
-#         card.update(color: "White")
-#     elsif color_json == "U" && color_json.length == 1
-#         puts "Blue"
-#         card.update(color: "Blue")
-#     elsif color_json == "B" && color_json.length == 1
-#         puts "Black"
-#         card.update(color: "Black")
-#     elsif color_json == "R" && color_json.length == 1
-#         puts "Red"
-#         card.update(color: "Red")
-#     elsif color_json == "G" && color_json.length == 1
-#         puts "Green"
-#         card.update(color: "Green")
-#     elsif color_json
-#         if color_json.length > 2
-#             puts "Multicolor"
-#             card.update(color: "Multicolor")
-#         end
-#     elsif color_json == nil
-#         puts "Colorless"
-#         card.update(color: "Colorless")
-#     end
-# end
+    if color_json === "W" && color_json.length == 1
+        puts "White"
+        card.update(color: "White")
+    elsif color_json == "U" && color_json.length == 1
+        puts "Blue"
+        card.update(color: "Blue")
+    elsif color_json == "B" && color_json.length == 1
+        puts "Black"
+        card.update(color: "Black")
+    elsif color_json == "R" && color_json.length == 1
+        puts "Red"
+        card.update(color: "Red")
+    elsif color_json == "G" && color_json.length == 1
+        puts "Green"
+        card.update(color: "Green")
+    elsif color_json
+        if color_json.length > 2
+            puts "Multicolor"
+            card.update(color: "Multicolor")
+        end
+    elsif color_json == nil
+        puts "Colorless"
+        card.update(color: "Colorless")
+    end
+end
 
 puts "Seeded 🍇"
