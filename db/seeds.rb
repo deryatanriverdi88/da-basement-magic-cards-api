@@ -146,18 +146,31 @@ MagicCard.default_order.all.slice(13237, 25000).each do |c|
     puts "product_id => " + c['product_id'].to_s
     puts 'group id => ' + c['group_id'].to_s
 
-    icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s)
-    icon_json = JSON.parse(icon_response)['icon_svg_uri']
-        puts icon_json
-        if icon_response
-            c.update(
-                icon: icon_json
-            )
-        else
-            c.update(
-                icon: ""
-            )
-        end
+    icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s, { |response, request, result, &block|
+            case response.code
+                icon_json = JSON.parse(icon_response)['icon_svg_uri']
+            when 200
+                c.update(
+                    icon: icon_json
+                )
+            when 404
+                puts "no url"
+                c.update(
+                    icon: ""
+                )
+            end
+        })
+
+        # puts icon_json
+        # if icon_response
+        #     c.update(
+        #         icon: icon_json
+        #     )
+        # else
+        #     c.update(
+        #         icon: ""
+        #     )
+        # end
         # case response
         # when 200
         #     c.update(
