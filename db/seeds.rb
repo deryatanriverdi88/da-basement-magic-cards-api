@@ -194,7 +194,7 @@ token = JSON.parse(token)
 #     end
 # end
 
-MagicCard.default_order.all.slice(13502, 25000).each do |card|
+MagicCard.default_order.all.slice(38502, MagicCard.default_order.all.length).each do |card|
     puts 'id => ' + card['id'].to_s
     puts 'product_id => ' + card['product_id'].to_s
     response_body = begin
