@@ -141,47 +141,27 @@ token = JSON.parse(token)
 #     # puts 'foil => ', c['foil']
 # end
 
-MagicCard.default_order.all.slice(13237, 25000).each do |c|
+MagicCard.default_order.all.last(100).each do |c|
     puts ' id => ' + c['id'].to_s
     puts "product_id => " + c['product_id'].to_s
     puts 'group id => ' + c['group_id'].to_s
 
-    icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s, { |response, request, result, &block|
-            case response.code
-                icon_json = JSON.parse(icon_response)['icon_svg_uri']
-            when 200
-                c.update(
-                    icon: icon_json
-                )
+    icon_response  =  RestClient.get('https://api.scryfall.com/sets/tcgplayer/' + c['group_id'].to_s){|response, request, result, block|
+        case response
+        when 200
             when 404
-                puts "no url"
-                c.update(
-                    icon: ""
-                )
-            end
-        })
+            icon_json = JSON.parse(icon_response)['icon_svg_uri']
+            c.update(
+            icon: icon_json
+        )
+        when 404
+            puts "error"
+            c.update(
+                icon: ""
+            )
+        end
+    }
 
-        # puts icon_json
-        # if icon_response
-        #     c.update(
-        #         icon: icon_json
-        #     )
-        # else
-        #     c.update(
-        #         icon: ""
-        #     )
-        # end
-        # case response
-        # when 200
-        #     c.update(
-        #     icon: icon_response['icon_svg_uri']
-        # )
-        # when 403
-        #     puts "error"
-        #     c.update(
-        #         icon: ""
-        #     )
-        # end
 end
 
 # MagicCard.default_order.all.slice(5000, MagicCard.default_order.all.length).each do |card|
