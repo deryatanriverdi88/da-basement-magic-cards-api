@@ -146,6 +146,7 @@ MagicCard.default_order.all.last(100).each do |c|
     puts 'group id => ' + c['group_id'].to_s
 
     icon_response  =  RestClient.get('https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'){|response, request, result, block|
+        puts response
         case response.code
         when 200
             c.update(
