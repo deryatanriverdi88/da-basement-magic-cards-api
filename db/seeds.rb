@@ -157,7 +157,6 @@ MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).eac
             )
         end
     }
-
 end
 
 # MagicCard.default_order.all.slice(5000, MagicCard.default_order.all.length).each do |card|
@@ -169,49 +168,59 @@ end
 #     end
 # end
 
-# MagicCard.default_order.all.slice(38502, MagicCard.default_order.all.length).each do |card|
-#     puts 'id => ' + card['id'].to_s
-#     puts 'product_id => ' + card['product_id'].to_s
-#     response_body = begin
-#         RestClient.get('https://api.scryfall.com/cards/tcgplayer/' + card['product_id'].to_s)
-#         rescue => e
-#         e.response.body
-#         end
-#     json_response = JSON.parse(response_body)
-#     puts json_response
-#     if json_response['code'] != "not_found"
-#         puts json_response['color_identity']
-#         json_response = json_response['color_identity'].pop
-#         if json_response === "W" && json_response.length == 1
-#             puts "White"
-#             card.update(color: "White")
-#         elsif json_response == "U" && json_response.length == 1
-#             puts "Blue"
-#             card.update(color: "Blue")
-#         elsif json_response == "B" && json_response.length == 1
-#             puts "Black"
-#             card.update(color: "Black")
-#         elsif json_response == "R" && json_response.length == 1
-#             puts "Red"
-#             card.update(color: "Red")
-#         elsif json_response == "G" && json_response.length == 1
-#             puts "Green"
-#             card.update(color: "Green")
-#         elsif json_response
-#             if json_response.length > 2
-#                 puts "Multicolor"
-#                 card.update(color: "Multicolor")
-#             end
-#         elsif json_response == nil
-#             puts "Colorless"
-#             card.update(color: "Colorless")
-#         end
-#     else
-#         puts "error"
-#         card.update(
-#             color: ""
-#         )
-#     end
-# end
+MagicCard.default_order.all.each do |card|
+    puts 'id => ' + card['id'].to_s
+    puts 'product_id => ' + card['product_id'].to_s
+    response_body = begin
+        RestClient.get('https://api.scryfall.com/cards/tcgplayer/' + card['product_id'].to_s)
+        rescue => e
+        e.response.body
+        end
+    json_response = JSON.parse(response_body)
+    # puts json_response
+    if json_response['code'] != "not_found"
+        puts "colors => "
+        if json_response
+            if json_response['colors']
+                puts json_response['colors']
+                json_response = json_response['colors']
+            elsif json_response["card_faces"]
+                puts json_response["card_faces"][0]['colors']
+                json_response = json_response["card_faces"][0]["colors"]
+            end
+        end
+        if json_response
+            if json_response.length == 1
+                if json_response.include?("W")
+                    puts "White"
+                    card.update(color: "White")
+                elsif json_response.include?("U")
+                    puts "Blue"
+                    card.update(color: "Blue")
+                elsif json_response.include?("B")
+                    puts "Black"
+                    card.update(color: "Black")
+                elsif json_response.include?("R")
+                    puts "Red"
+                    card.update(color: "Red")
+                elsif json_response.include?("G")
+                    puts "Green"
+                card.update(color: "Green")
+                end
+            elsif json_response.length > 1
+                puts "Multicolor"
+                card.update(color: "Multicolor")
+            elsif json_response.empty?
+                puts "Colorless"
+                card.update(color: "Colorless")
+            end
+        end
+    else
+        puts "error"
+        card.update(
+            color: ""
+        )
+    end
+end
 
 puts "Seeded 🍇"
