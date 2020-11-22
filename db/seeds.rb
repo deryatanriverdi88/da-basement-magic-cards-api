@@ -141,23 +141,23 @@ token = JSON.parse(token)
 #     # puts 'foil => ', c['foil']
 # end
 
-MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
-    puts ' id => ' + c['id'].to_s
-    puts 'group id => ' + c['group_id'].to_s
+# MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).each do |c|
+#     puts ' id => ' + c['id'].to_s
+#     puts 'group id => ' + c['group_id'].to_s
 
-    icon_response  =  RestClient.get('https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'){|response, request, result, block|
-        case response.code
-        when 200
-            c.update(
-            icon: 'https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'
-        )
-        when 403
-            c.update(
-                icon: ""
-            )
-        end
-    }
-end
+#     icon_response  =  RestClient.get('https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'){|response, request, result, block|
+#         case response.code
+#         when 200
+#             c.update(
+#             icon: 'https://tcgplayer-cdn.tcgplayer.com/set_icon/' + c['group_id'].to_s + '.jpg'
+#         )
+#         when 403
+#             c.update(
+#                 icon: ""
+#             )
+#         end
+#     }
+# end
 
 # MagicCard.default_order.all.slice(5000, MagicCard.default_order.all.length).each do |card|
 #     if !card['group_name']
@@ -168,7 +168,7 @@ end
 #     end
 # end
 
-MagicCard.default_order.all.each do |card|
+MagicCard.default_order.all.slice(0, 25000).each do |card|
     puts 'id => ' + card['id'].to_s
     puts 'product_id => ' + card['product_id'].to_s
     response_body = begin
