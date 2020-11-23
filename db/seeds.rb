@@ -182,14 +182,16 @@ MagicCard.default_order.all.slice(25000, MagicCard.default_order.all.length).eac
         puts "colors => "
         if json_response
             if json_response['colors']
+                if json_response['colors'].length > 0
                 puts json_response['colors']
                 json_response = json_response['colors']
+                elsif json_response['color_identity']
+                    puts json_response['color_identity']
+                   json_response = json_response['color_identity']
+                end
             elsif json_response["card_faces"]
                 puts json_response["card_faces"][0]['colors']
                 json_response = json_response["card_faces"][0]["colors"]
-            elsif json_response['color_identity']
-                puts json_response['color_identity']
-                json_response = ['color_identity']
             end
         end
         if json_response
