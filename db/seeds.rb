@@ -15,82 +15,82 @@ token = RestClient.post("https://api.tcgplayer.com/token", payload  ,headers={"c
 token = JSON.parse(token)
 @access_token = token['access_token']
 
-# def all_cards
-#     length = 0
-#     response = RestClient.get 'https://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=cards', {:Authorization => 'Bearer '+ @access_token}
-#     length = JSON.parse(response)['totalItems']
-#     offset = 0
-#     json = []
-#     while offset < length do
-#         response = RestClient.get('https://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=cards&offset='+offset.to_s+'&limit=100', {:Authorization => 'Bearer '+ @access_token}){ |response, request, result, &block|
-#                         case response.code
-#                         when 200
-#                             json.push(JSON.parse(response)['results'])
-#                         when 404
-#                             puts offset, count
-#                         else
-#                           response.return!(request, result, &block)
-#                         end }
-#         offset += 100
-#     end
-#     puts "jason => ", json.flatten
-#     return json.flatten
-# end
+def all_cards
+    length = 0
+    response = RestClient.get 'https://api.tcgplayer.com/catalog/products?categoryId=1&productTypes=cards', {:Authorization => 'Bearer '+ @access_token}
+    length = JSON.parse(response)['totalItems']
+    offset = 0
+    json = []
+    while offset < length do
+        response = RestClient.get('https://api.tcgplayer.com/catalog/products?categoryId=1&getExtendedFields=true&productTypes=cards&offset='+offset.to_s+'&limit=100', {:Authorization => 'Bearer '+ @access_token}){ |response, request, result, &block|
+                        case response.code
+                        when 200
+                            json.push(JSON.parse(response)['results'])
+                        when 404
+                            puts offset, count
+                        else
+                          response.return!(request, result, &block)
+                        end }
+        offset += 100
+    end
+    puts "jason => ", json.flatten
+    return json.flatten
+end
 
-# def check_rarity(values)
-#     rarity = ""
-#     values.each do |value|
-#         if value['name'] === "Rarity"
-#             if value['value'] == 'U'
-#                 rarity = 'Uncommon'
-#             elsif value['value'] == 'T'
-#                 rarity = 'Token'
-#             elsif value['value'] == 'S'
-#                 rarity = 'Special'
-#             elsif value['value'] == 'P'
-#                 rarity = 'Promo'
-#             elsif value['value'] == 'M'
-#                 rarity = 'Mythic'
-#             elsif value['value'] == 'L'
-#                 rarity = 'Land'
-#             elsif value['value'] == 'C'
-#                 rarity = 'Common'
-#             elsif value['value'] == 'R'
-#                 rarity = 'Rare'
-#             end
-#         end
-#     end
-#     return rarity
-# end
+def check_rarity(values)
+    rarity = ""
+    values.each do |value|
+        if value['name'] === "Rarity"
+            if value['value'] == 'U'
+                rarity = 'Uncommon'
+            elsif value['value'] == 'T'
+                rarity = 'Token'
+            elsif value['value'] == 'S'
+                rarity = 'Special'
+            elsif value['value'] == 'P'
+                rarity = 'Promo'
+            elsif value['value'] == 'M'
+                rarity = 'Mythic'
+            elsif value['value'] == 'L'
+                rarity = 'Land'
+            elsif value['value'] == 'C'
+                rarity = 'Common'
+            elsif value['value'] == 'R'
+                rarity = 'Rare'
+            end
+        end
+    end
+    return rarity
+end
 
-# def check_text(values)
-#     text = ''
-#     values.each do |value|
-#         if value['name'] == "OracleText"
-#             text = value['value']
-#         end
-#     end
-#     return text
-# end
+def check_text(values)
+    text = ''
+    values.each do |value|
+        if value['name'] == "OracleText"
+            text = value['value']
+        end
+    end
+    return text
+end
 
-# def check_sub_type(values)
-#     sub_type = ''
-#     values.each do |value|
-#         if value['name'] == "SubType"
-#             sub_type = value['value']
-#         end
-#     end
-#     return sub_type
-# end
+def check_sub_type(values)
+    sub_type = ''
+    values.each do |value|
+        if value['name'] == "SubType"
+            sub_type = value['value']
+        end
+    end
+    return sub_type
+end
 
-# all_cards.sort_by{|card| card['id']}.each do |card|
-#         if card && !MagicCard.all.exists?(product_id: card['productId'])
-#             puts 'card => ', card
-#         MagicCard.create(name: card["name"], img_url: card['imageUrl'], category_id: card['categoryId'], group_id: card['groupId'], product_id: card['productId'],rarity: check_rarity(card['extendedData']), sub_type: check_sub_type(card['extendedData']), text: check_text(card['extendedData']))
-#         else
-#             puts "card exist in database"
-#         end
-# end
+all_cards.sort_by{|card| card['id']}.each do |card|
+        if card && !MagicCard.all.exists?(product_id: card['productId'])
+            puts 'card => ', card
+        MagicCard.create(name: card["name"], img_url: card['imageUrl'], category_id: card['categoryId'], group_id: card['groupId'], product_id: card['productId'],rarity: check_rarity(card['extendedData']), sub_type: check_sub_type(card['extendedData']), text: check_text(card['extendedData']))
+        else
+            puts "card exist in database"
+        end
+end
 
 # MagicCard.default_order.all.each do |c|
 #     group_response = RestClient.get 'https://api.tcgplayer.com/catalog/groups/'+ c['group_id'].to_s, {:Authorization => 'Bearer '+ @access_token}
